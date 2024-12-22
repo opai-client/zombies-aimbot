@@ -8,6 +8,7 @@ import today.opai.api.features.ExtensionModule;
 import today.opai.api.interfaces.EventHandler;
 import today.opai.api.interfaces.game.entity.Entity;
 import today.opai.api.interfaces.game.entity.LivingEntity;
+import today.opai.api.interfaces.game.entity.Player;
 import today.opai.api.interfaces.modules.values.NumberValue;
 import win.cuteguimc.opai.aimbot.blockgame.BlockPos;
 import win.cuteguimc.opai.aimbot.blockgame.Blocks;
@@ -23,6 +24,7 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
     private final NumberValue predictSize = openAPI.getValueManager().createDouble("Predict Size", 1.2, 0, 8, 0.1);
 
     private LivingEntity target;
+    public float[] lastRotations = new float[2];
     
     public AimbotModule() {
         super("ZombiesAimbot", "Use your pussy to play hypixel zombies", EnumModuleCategory.COMBAT);
@@ -31,18 +33,20 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
     }
     
     public LivingEntity getBestTarget() {
-        float distance = 50f;
+        double distance = Double.MAX_VALUE;
         List<Entity> entities = openAPI.getWorld().getLoadedEntities();
         PositionData positionData = openAPI.getLocalPlayer().getPosition();
         for (Entity entity: entities) {
-            if (!(entity instanceof LivingEntity)) continue;
+            if (!(entity instanceof LivingEntity) || entity instanceof Player) continue;
             float[] rot = RotationUtils.getRotations((LivingEntity) entity);
-            if (entity.getDistanceToPosition(positionData) <= distance &&
+            double rotDiff = RotationUtils.getRotationDifference(new RotationData(rot[0], rot[1]), openAPI.getLocalPlayer().getRotation());
+            if (entity.getDistanceToPosition(positionData) <= 50f &&
                     ((LivingEntity) entity).getHealth() > 0 &&
                     // how to detect villagers?
                     Math.abs(entity.getMotion().getY()) <= 1 &&
-                    canEntityBeSeen((LivingEntity) entity)) {
-                distance = (float) entity.getDistanceToPosition(openAPI.getLocalPlayer().getPosition());
+                    canEntityBeSeen((LivingEntity) entity) &&
+                    rotDiff <= distance) {
+                distance = rotDiff;
                 target = (LivingEntity) entity;
             }
         }
@@ -54,15 +58,17 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
         if (openAPI.getLocalPlayer() != null && openAPI.getWorld() != null) {
             getBestTarget();
             if (target != null) {
-                float[] rotations = RotationUtils.getRotations(target);
-                openAPI.getRotationManager().applyRotation(new RotationData(rotations[0], rotations[1]), 180, true);
+                lastRotations = RotationUtils.getRotations(target);
+                openAPI.getRotationManager().applyRotation(new RotationData(lastRotations[0], lastRotations[1]), 180, true);
             }
         }
     }
 
     @Override
     public String getSuffix() {
-        return predictSize.getValue().toString();
+        String suffix = predictSize.getValue().toString();
+        if (lastRotations != null) suffix += ", " + lastRotations[0] + ", " + lastRotations[1];
+        return suffix;
     }
 
     public double[] getPredictPos(LivingEntity entity) {
