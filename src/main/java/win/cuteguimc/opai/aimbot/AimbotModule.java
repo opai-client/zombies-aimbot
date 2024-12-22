@@ -9,6 +9,7 @@ import today.opai.api.interfaces.EventHandler;
 import today.opai.api.interfaces.game.entity.Entity;
 import today.opai.api.interfaces.game.entity.LivingEntity;
 import today.opai.api.interfaces.game.entity.Player;
+import today.opai.api.interfaces.modules.values.BooleanValue;
 import today.opai.api.interfaces.modules.values.NumberValue;
 import win.cuteguimc.opai.aimbot.blockgame.BlockPos;
 import win.cuteguimc.opai.aimbot.blockgame.Blocks;
@@ -22,13 +23,14 @@ import static win.cuteguimc.opai.aimbot.AimbotExtension.openAPI;
 
 public class AimbotModule extends ExtensionModule implements EventHandler {
     private final NumberValue predictSize = openAPI.getValueManager().createDouble("Predict Size", 1.2, 0, 8, 0.1);
+    private final BooleanValue autoFire = openAPI.getValueManager().createBoolean("Auto Fire", true);
 
     private LivingEntity target;
     public float[] lastRotations = new float[2];
     
     public AimbotModule() {
         super("ZombiesAimbot", "Use your pussy to play hypixel zombies", EnumModuleCategory.COMBAT);
-        this.addValues(predictSize);
+        this.addValues(predictSize, autoFire);
         setEventHandler(this);
     }
     
@@ -60,6 +62,9 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
             if (target != null) {
                 lastRotations = RotationUtils.getRotations(target);
                 openAPI.getRotationManager().applyRotation(new RotationData(lastRotations[0], lastRotations[1]), 180, true);
+                if (autoFire.getValue() && openAPI.getLocalPlayer().getTicksExisted() % 2 == 0) {
+                    openAPI.getLocalPlayer().rightClickMouse();
+                }
             }
         }
     }
