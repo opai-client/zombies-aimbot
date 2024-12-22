@@ -17,7 +17,8 @@ import static win.cuteguimc.opai.aimbot.AimbotExtension.openAPI;
 
 public class MobESPModule extends ExtensionModule implements EventHandler {
     public MobESPModule() {
-        super("MobESP", "Where is the last zombie?", EnumModuleCategory.COMBAT);
+        super("MobESP", "Where is the last zombie?", EnumModuleCategory.VISUAL);
+        this.setEventHandler(this);
     }
     
     private List<LivingEntity> getMobs() {
