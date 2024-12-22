@@ -12,5 +12,6 @@ public class AimbotExtension extends Extension {
     @Override
     public void initialize(OpenAPI openAPI) {
         AimbotExtension.openAPI = openAPI;
+        openAPI.registerFeature(new AimbotModule());
     }
 }
