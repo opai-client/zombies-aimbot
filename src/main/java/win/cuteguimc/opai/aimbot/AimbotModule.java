@@ -1,17 +1,13 @@
 package win.cuteguimc.opai.aimbot;
 
-import com.sun.xml.internal.ws.api.message.Packet;
 import today.opai.api.dataset.PositionData;
 import today.opai.api.dataset.RotationData;
 import today.opai.api.enums.EnumDirection;
 import today.opai.api.enums.EnumModuleCategory;
-import today.opai.api.events.EventPacketReceive;
 import today.opai.api.features.ExtensionModule;
 import today.opai.api.interfaces.EventHandler;
 import today.opai.api.interfaces.game.entity.Entity;
 import today.opai.api.interfaces.game.entity.LivingEntity;
-import today.opai.api.interfaces.game.network.NetPacket;
-import today.opai.api.interfaces.modules.values.BooleanValue;
 import today.opai.api.interfaces.modules.values.NumberValue;
 import win.cuteguimc.opai.aimbot.blockgame.BlockPos;
 import win.cuteguimc.opai.aimbot.blockgame.Blocks;
