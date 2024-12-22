@@ -46,8 +46,8 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
                     ((LivingEntity) entity).getHealth() > 0 &&
                     // how to detect villagers?
                     Math.abs(entity.getMotion().getY()) <= 1 &&
-                    canEntityBeSeen((LivingEntity) entity) &&
-                    rotDiff <= distance) {
+                    rotDiff <= distance &&
+                    canEntityBeSeen((LivingEntity) entity)) {
                 distance = rotDiff;
                 target = (LivingEntity) entity;
             }
