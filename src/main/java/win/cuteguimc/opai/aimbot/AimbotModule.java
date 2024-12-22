@@ -26,6 +26,7 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
     
     public AimbotModule() {
         super("ZombiesAimbot", "Use your pussy to play hypixel zombies", EnumModuleCategory.COMBAT);
+        this.addValues(predictSize);
         setEventHandler(this);
     }
     
