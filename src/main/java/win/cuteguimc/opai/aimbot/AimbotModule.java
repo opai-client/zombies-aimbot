@@ -32,10 +32,9 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
     
     public LivingEntity getBestTarget() {
         float distance = 50f;
-        LivingEntity target = null;
         List<Entity> entities = openAPI.getWorld().getLoadedEntities();
         PositionData positionData = openAPI.getLocalPlayer().getPosition();
-        for (Entity entity: openAPI.getWorld().getLoadedEntities()) {
+        for (Entity entity: entities) {
             if (!(entity instanceof LivingEntity)) continue;
             float[] rot = RotationUtils.getRotations((LivingEntity) entity);
             if (entity.getDistanceToPosition(positionData) <= distance &&
@@ -53,7 +52,8 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
     @Override
     public void onTick() {
         if (openAPI.getLocalPlayer() != null && openAPI.getWorld() != null) {
-            if (getBestTarget() != null) {
+            getBestTarget();
+            if (target != null) {
                 float[] rotations = RotationUtils.getRotations(target);
                 openAPI.getRotationManager().applyRotation(new RotationData(rotations[0], rotations[1]), 180, true);
             }
