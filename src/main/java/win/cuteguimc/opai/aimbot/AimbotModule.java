@@ -29,7 +29,7 @@ public class AimbotModule extends ExtensionModule implements EventHandler {
     public float[] lastRotations = new float[2];
     
     public AimbotModule() {
-        super("ZombiesAimbot", "Use your pussy to play hypixel zombies", EnumModuleCategory.COMBAT);
+        super("Zombies Aimbot", "Use your pussy to play hypixel zombies", EnumModuleCategory.COMBAT);
         this.addValues(predictSize, autoFire);
         setEventHandler(this);
     }
