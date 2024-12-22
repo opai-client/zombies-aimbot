@@ -13,5 +13,6 @@ public class AimbotExtension extends Extension {
     public void initialize(OpenAPI openAPI) {
         AimbotExtension.openAPI = openAPI;
         openAPI.registerFeature(new AimbotModule());
+        openAPI.registerFeature(new MobESPModule());
     }
 }
